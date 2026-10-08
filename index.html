@@ -174,7 +174,7 @@ h2{font-size:1.45rem}
 .box.ok{border-color:var(--ok);background:var(--ok-bg)}
 .box.bad{border-color:var(--warn);background:var(--warn-bg)}
 .fr .box{width:3.4em;min-height:2.3rem;font-size:1.1rem}
-.choices{gap:.6rem}
+.choices{gap:.6rem}.opt-wrap{display:inline-flex;align-items:stretch}.opt-wrap .opt{border-top-right-radius:0;border-bottom-right-radius:0;border-right-width:1px}.opt-say{width:2.6rem;flex:none;display:grid;place-items:center;border:3px solid var(--line);border-left-width:1px;border-radius:0 12px 12px 0;background:var(--accent-soft);color:var(--accent);padding:0;cursor:pointer}.opt-say svg{width:1.25rem;height:1.25rem}.fb-msg .fb-say{margin-left:auto;flex:none;width:2.2rem;height:2.2rem;align-self:center}.fb-msg .fb-say svg{width:1.1rem;height:1.1rem;margin:0}
 .opt{min-height:3.1rem;min-width:4.6rem;padding:.4rem 1.1rem;border:3px solid var(--line);background:var(--card);border-radius:12px;font-size:1.15rem;font-weight:700;font-family:var(--body);display:inline-flex;align-items:center;justify-content:center;gap:.2rem}
 .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
 .opt.ok{border-color:var(--ok);background:var(--ok-bg)}
@@ -376,7 +376,7 @@ details.grp>.units{padding:0 1.1rem 1.1rem}
 @media (max-width:640px){.badges{grid-template-columns:repeat(3,1fr)}}
 /* 練習遊戲 */
 .drill-h{margin:1.6rem 0 .7rem}
-.drill-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.drill-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem}a.drill-card{color:inherit;text-decoration:none}
 .drill-card{display:flex;gap:1rem;align-items:center;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:1rem 1.2rem;min-height:5.4rem}
 .drill-card:hover{border-color:var(--accent)}
 .drill-card b{font-family:var(--display);font-size:1.3rem;display:block}
@@ -502,6 +502,25 @@ html[data-zy] .stage>span:first-child{white-space:nowrap}html[data-zy] .stage sm
 .peek-b.nudge{animation:nudge .45s}
 @keyframes nudge{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 [data-calm] .clue.ready,[data-calm] .peek-b.nudge{animation:none}
+/* 我懂：題目旁邊的鷹架圖 */
+.card.know-wide{max-width:980px;margin:0 auto}
+.know-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,auto);gap:1.2rem;align-items:center}
+.know-split:not(:has(.know-vis)){display:block}
+.know-vis{background:var(--paper);border:1px dashed var(--line);border-radius:14px;padding:.8rem;max-width:440px;justify-self:center}
+.know-vis .vis{max-width:100%}
+@media (max-width:760px){.know-split{grid-template-columns:1fr}}
+/* 選項報讀 */
+.opt-wrap{display:inline-flex;align-items:stretch;position:relative}
+.opt-wrap .opt{border-top-right-radius:0;border-bottom-right-radius:0;border-right-width:1px}
+.opt-say{width:2.6rem;flex:none;display:grid;place-items:center;border:3px solid var(--line);border-left-width:1px;border-radius:0 12px 12px 0;background:var(--accent-soft);color:var(--accent);padding:0}
+.opt-say svg{width:1.25rem;height:1.25rem}
+.opt-say:active{filter:brightness(.92)}
+/* 彎的要拉直動畫 */
+.vis .rope{fill:none;stroke-width:7;stroke-linecap:round} .vis .k1s{stroke:#E8553D} .vis .k3s{stroke:#4C9BD6}
+.rope-calm{display:none;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.rope-still{margin:0;flex:1 1 200px;text-align:center}.rope-still figcaption{font-size:.85rem;color:var(--mute)}
+[data-calm] .rope-anim{display:none}[data-calm] .rope-calm{display:flex}
+.look-hint-top{margin:0 0 .6rem}.look-hint-top:empty{display:none}
 /* 二上：數字鐘、定位板 */
 .digi{display:inline-block;font-family:"Courier New",ui-monospace,monospace;font-size:2.6rem;font-weight:700;background:#1F1B24;color:#7CFC9A;padding:.25rem 1.1rem;border-radius:12px;letter-spacing:.08em;margin:.4rem auto}
 .vis-box .digi{display:table}
@@ -1569,7 +1588,7 @@ const U=[
 ];
 
 /* ---------- 注音：每個國字右邊加注音（設定裡可以關掉） ---------- */
-const ZY_RAW=`一ㄧ 七ㄑㄧ 三ㄙㄢ 上ㄕㄤˋ 下ㄒㄧㄚˋ 不ㄅㄨˋ 丙ㄅㄧㄥˇ 中ㄓㄨㄥ 久ㄐㄧㄡˇ 之ㄓ 乘ㄔㄥˊ 乙ㄧˇ 九ㄐㄧㄡˇ 也ㄧㄝˇ 亂ㄌㄨㄢˋ 了˙ㄌㄜ 事ㄕˋ 二ㄦˋ 互ㄏㄨˋ 五ㄨˇ 些ㄒㄧㄝ 交ㄐㄧㄠ 人ㄖㄣˊ 什ㄕㄣˊ 他ㄊㄚ 以ㄧˇ 件ㄐㄧㄢˋ 任ㄖㄣˋ 休ㄒㄧㄡ 伸ㄕㄣ 但ㄉㄢˋ 位ㄨㄟˋ 住ㄓㄨˋ 何ㄏㄜˊ 作ㄗㄨㄛˋ 你ㄋㄧˇ 佳ㄐㄧㄚ 來ㄌㄞˊ 例ㄌㄧˋ 依ㄧ 便ㄅㄧㄢˋ 係ㄒㄧˋ 保ㄅㄠˇ 信ㄒㄧㄣˋ 個˙ㄍㄜ 倍ㄅㄟˋ 們˙ㄇㄣ 倒ㄉㄠˋ 候˙ㄏㄡ 借ㄐㄧㄝˋ 假ㄐㄧㄚˇ 做ㄗㄨㄛˋ 停ㄊㄧㄥˊ 備ㄅㄟˋ 元ㄩㄢˊ 先ㄒㄧㄢ 光ㄍㄨㄤ 入ㄖㄨˋ 內ㄋㄟˋ 全ㄑㄩㄢˊ 兩ㄌㄧㄤˇ 八ㄅㄚ 公ㄍㄨㄥ 六ㄌㄧㄡˋ 共ㄍㄨㄥˋ 其ㄑㄧˊ 典ㄉㄧㄢˇ 冊ㄘㄜˋ 再ㄗㄞˋ 冠ㄍㄨㄢˋ 冷ㄌㄥˇ 出ㄔㄨ 分ㄈㄣ 切ㄑㄧㄝ 判ㄆㄢˋ 別ㄅㄧㄝˊ 刪ㄕㄢ 到ㄉㄠˋ 刷ㄕㄨㄚ 前ㄑㄧㄢˊ 剛ㄍㄤ 剩ㄕㄥˋ 剪ㄐㄧㄢˇ 力ㄌㄧˋ 功ㄍㄨㄥ 加ㄐㄧㄚ 努ㄋㄨˇ 勇ㄩㄥˇ 動ㄉㄨㄥˋ 勵ㄌㄧˋ 勾ㄍㄡ 包ㄅㄠ 匙ㄔˊ 十ㄕˊ 升ㄕㄥ 午ㄨˇ 半ㄅㄢˋ 博ㄅㄛˊ 卡ㄎㄚˇ 卷ㄐㄩㄢˋ 厚ㄏㄡˋ 原ㄩㄢˊ 去ㄑㄩˋ 參ㄘㄢ 又ㄧㄡˋ 友ㄧㄡˇ 反ㄈㄢˇ 口ㄎㄡˇ 另ㄌㄧㄥˋ 只ㄓˇ 叫ㄐㄧㄠˋ 叭˙ㄅㄚ 可ㄎㄜˇ 台ㄊㄞˊ 右ㄧㄡˋ 吃ㄔ 各ㄍㄜˋ 合ㄏㄜˊ 同ㄊㄨㄥˊ 向ㄒㄧㄤˋ 呢˙ㄋㄜ 周ㄓㄡ 呱ㄍㄨㄚ 味ㄨㄟˋ 和ㄏㄢˋ 哪ㄋㄚˇ 唸ㄋㄧㄢˋ 念ㄋㄧㄢˋ 商ㄕㄤ 喇ㄌㄚˇ 喔ㄛ 喝ㄏㄜ 單ㄉㄢ 嗎˙ㄇㄚ 器ㄑㄧˋ 囉˙ㄌㄨㄛ 四ㄙˋ 回ㄏㄨㄟˊ 因ㄧㄣ 圈ㄑㄩㄢ 圍ㄨㄟˊ 園ㄩㄢˊ 圓ㄩㄢˊ 圖ㄊㄨˊ 在ㄗㄞˋ 地ㄉㄧˋ 均ㄐㄩㄣ 坐ㄗㄨㄛˋ 基ㄐㄧ 堆ㄉㄨㄟ 場ㄔㄤˊ 塊ㄎㄨㄞˋ 塗ㄊㄨˊ 塘ㄊㄤˊ 填ㄊㄧㄢˊ 士ㄕˋ 外ㄨㄞˋ 多ㄉㄨㄛ 夠ㄍㄡˋ 大ㄉㄚˋ 天ㄊㄧㄢ 太ㄊㄞˋ 套ㄊㄠˋ 奶ㄋㄞˇ 好ㄏㄠˇ 始ㄕˇ 媽ㄇㄚ 子˙ㄗ 字ㄗˋ 存ㄘㄨㄣˊ 學ㄒㄩㄝˊ 它ㄊㄚ 完ㄨㄢˊ 定ㄉㄧㄥˋ 室ㄕˋ 害ㄏㄞˋ 家ㄐㄧㄚ 容ㄖㄨㄥˊ 寫ㄒㄧㄝˇ 寬ㄎㄨㄢ 封ㄈㄥ 對ㄉㄨㄟˋ 小ㄒㄧㄠˇ 少ㄕㄠˇ 就ㄐㄧㄡˋ 尺ㄔˇ 屋ㄨ 層ㄘㄥˊ 左ㄗㄨㄛˇ 差ㄔㄚ 己ㄐㄧˇ 已ㄧˇ 帆ㄈㄢˊ 師ㄕ 帶ㄉㄞˋ 常ㄔㄤˊ 帽ㄇㄠˋ 幅ㄈㄨˊ 幕ㄇㄨˋ 平ㄆㄧㄥˊ 幾ㄐㄧˇ 床ㄔㄨㄤˊ 序ㄒㄩˋ 底ㄉㄧˇ 度ㄉㄨˋ 廂ㄒㄧㄤ 建ㄐㄧㄢˋ 式ㄕˋ 弧ㄏㄨˊ 張ㄓㄤ 彎ㄨㄢ 形ㄒㄧㄥˊ 往ㄨㄤˇ 很ㄏㄣˇ 律ㄌㄩˋ 後ㄏㄡˋ 徑ㄐㄧㄥˋ 得˙ㄉㄜ 從ㄘㄨㄥˊ 心ㄒㄧㄣ 忘ㄨㄤˋ 快ㄎㄨㄞˋ 怎ㄗㄣˇ 性ㄒㄧㄥˋ 情ㄑㄧㄥˊ 想ㄒㄧㄤˇ 愈ㄩˋ 慢ㄇㄢˋ 慶ㄑㄧㄥˋ 懂ㄉㄨㄥˇ 應ㄧㄥ 成ㄔㄥˊ 我ㄨㄛˇ 或ㄏㄨㄛˋ 戰ㄓㄢˋ 戲ㄒㄧˋ 戴ㄉㄞˋ 房ㄈㄤˊ 所ㄙㄨㄛˇ 扇ㄕㄢˋ 手ㄕㄡˇ 才ㄘㄞˊ 打ㄉㄚˇ 找ㄓㄠˇ 把ㄅㄚˇ 投ㄊㄡˊ 拉ㄌㄚ 拼ㄆㄧㄣ 拿ㄋㄚˊ 持ㄔˊ 指ㄓˇ 按ㄢˋ 挑ㄊㄧㄠˇ 挖ㄨㄚ 掃ㄙㄠˇ 掉ㄉㄧㄠˋ 排ㄆㄞˊ 探ㄊㄢˋ 接ㄐㄧㄝ 推ㄊㄨㄟ 描ㄇㄧㄠˊ 提ㄊㄧˊ 換ㄏㄨㄢˋ 撈ㄌㄠ 撿ㄐㄧㄢˇ 操ㄘㄠ 改ㄍㄞˇ 放ㄈㄤˋ 敏ㄇㄧㄣˇ 教ㄐㄧㄠˋ 整ㄓㄥˇ 數ㄕㄨˇ 新ㄒㄧㄣ 斷ㄉㄨㄢˋ 方ㄈㄤ 於ㄩˊ 旁ㄆㄤˊ 旗ㄑㄧˊ 早ㄗㄠˇ 明ㄇㄧㄥˊ 易ㄧˋ 星ㄒㄧㄥ 是ㄕˋ 時ㄕˊ 晚ㄨㄢˇ 曲ㄑㄩ 更ㄍㄥˋ 書ㄕㄨ 最ㄗㄨㄟˋ 會ㄏㄨㄟˋ 有ㄧㄡˇ 朋ㄆㄥˊ 朗ㄌㄤˇ 木ㄇㄨˋ 本ㄅㄣˇ 朵ㄉㄨㄛˇ 杯ㄅㄟ 東ㄉㄨㄥ 林ㄌㄧㄣˊ 果ㄍㄨㄛˇ 枝ㄓ 查ㄔㄚˊ 柴ㄔㄞˊ 校ㄒㄧㄠˋ 根ㄍㄣ 格ㄍㄜˊ 框ㄎㄨㄤ 案ㄢˋ 桌ㄓㄨㄛ 條ㄊㄧㄠˊ 梯ㄊㄧ 棒ㄅㄤˋ 椅ㄧˇ 模ㄇㄛˊ 樣ㄧㄤˋ 樹ㄕㄨˋ 機ㄐㄧ 檢ㄐㄧㄢˇ 櫃ㄍㄨㄟˋ 次ㄘˋ 正ㄓㄥˋ 步ㄅㄨˋ 母ㄇㄨˇ 每ㄇㄟˇ 比ㄅㄧˇ 氣ㄑㄧˋ 水ㄕㄨㄟˇ 求ㄑㄧㄡˊ 池ㄔˊ 汽ㄑㄧˋ 沒ㄇㄟˊ 油ㄧㄡˊ 法ㄈㄚˇ 泳ㄩㄥˇ 洗ㄒㄧˇ 洞ㄉㄨㄥˋ 淡ㄉㄢˋ 混ㄏㄨㄣˋ 減ㄐㄧㄢˇ 測ㄘㄜˋ 游ㄧㄡˊ 湯ㄊㄤ 準ㄓㄨㄣˇ 溜ㄌㄧㄡ 滑ㄏㄨㄚˊ 滾ㄍㄨㄣˇ 滿ㄇㄢˇ 漏ㄌㄡˋ 演ㄧㄢˇ 澡ㄗㄠˇ 瀏ㄌㄧㄡˊ 火ㄏㄨㄛˇ 灰ㄏㄨㄟ 照ㄓㄠˋ 煮ㄓㄨˇ 熟ㄕㄡˊ 熱ㄖㄜˋ 片ㄆㄧㄢˋ 版ㄅㄢˇ 牙ㄧㄚˊ 牛ㄋㄧㄡˊ 物ㄨˋ 特ㄊㄜˋ 狀ㄓㄨㄤˋ 猜ㄘㄞ 獎ㄐㄧㄤˇ 率ㄌㄩˋ 玩ㄨㄢˊ 現ㄒㄧㄢˋ 球ㄑㄧㄡˊ 理ㄌㄧˇ 環ㄏㄨㄢˊ 瓢ㄆㄧㄠˊ 瓶ㄆㄧㄥˊ 生ㄕㄥ 用ㄩㄥˋ 甲ㄐㄧㄚˇ 番ㄈㄢ 畫ㄏㄨㄚˋ 當ㄉㄤ 疊ㄉㄧㄝˊ 發ㄈㄚ 白ㄅㄞˊ 的˙ㄉㄜ 皮ㄆㄧˊ 盒ㄏㄜˊ 盤ㄆㄢˊ 目ㄇㄨˋ 直ㄓˊ 相ㄒㄧㄤ 看ㄎㄢˋ 真ㄓㄣ 眨ㄓㄚˇ 眼ㄧㄢˇ 睛˙ㄐㄧㄥ 知ㄓ 短ㄉㄨㄢˇ 矮ㄞˇ 碗ㄨㄢˇ 確ㄑㄩㄝˋ 碼ㄇㄚˇ 礎ㄔㄨˇ 示ㄕˋ 禮ㄌㄧˇ 秒ㄇㄧㄠˇ 移ㄧˊ 程ㄔㄥˊ 種ㄓㄨㄥˇ 積ㄐㄧ 穩ㄨㄣˇ 空ㄎㄨㄥ 穿ㄔㄨㄢ 立ㄌㄧˋ 站ㄓㄢˋ 章ㄓㄤ 端ㄉㄨㄢ 競ㄐㄧㄥˋ 符ㄈㄨˊ 第ㄉㄧˋ 筆ㄅㄧˇ 等ㄉㄥˇ 答ㄉㄚˊ 算ㄙㄨㄢˋ 管ㄍㄨㄢˇ 箱ㄒㄧㄤ 節ㄐㄧㄝˊ 簡ㄐㄧㄢˇ 籃ㄌㄢˊ 精ㄐㄧㄥ 糕ㄍㄠ 糖ㄊㄤˊ 紀ㄐㄧˋ 約ㄩㄝ 紅ㄏㄨㄥˊ 紙ㄓˇ 級ㄐㄧˊ 索ㄙㄨㄛˇ 結ㄐㄧㄝˊ 給ㄍㄟˇ 經ㄐㄧㄥ 綜ㄗㄨㄥˋ 線ㄒㄧㄢˋ 緞ㄉㄨㄢˋ 編ㄅㄧㄢ 練ㄌㄧㄢˋ 總ㄗㄨㄥˇ 績ㄐㄧ 繩ㄕㄥˊ 繼ㄐㄧˋ 續ㄒㄩˋ 缸ㄍㄤ 罐ㄍㄨㄢˋ 置ㄓˋ 羊ㄧㄤˊ 美ㄇㄟˇ 習ㄒㄧˊ 翰ㄏㄢˋ 老ㄌㄠˇ 考ㄎㄠˇ 聽ㄊㄧㄥ 背ㄅㄟˋ 能ㄋㄥˊ 腦ㄋㄠˇ 腳ㄐㄧㄠˇ 臉ㄌㄧㄢˇ 自ㄗˋ 與ㄩˇ 船ㄔㄨㄢˊ 色ㄙㄜˋ 花ㄏㄨㄚ 茄ㄑㄧㄝˊ 葉ㄧㄝˋ 著˙ㄓㄜ 薄ㄅㄠˊ 藍ㄌㄢˊ 蘋ㄆㄧㄥˊ 虛ㄒㄩ 號ㄏㄠˋ 蛋ㄉㄢˋ 螞ㄇㄚˇ 螢ㄧㄥˊ 蟲ㄔㄨㄥˊ 蟻ㄧˇ 蠟ㄌㄚˋ 表ㄅㄧㄠˇ 被ㄅㄟˋ 裝ㄓㄨㄤ 裡ㄌㄧˇ 複ㄈㄨˋ 襪ㄨㄚˋ 西ㄒㄧ 要ㄧㄠˋ 規ㄍㄨㄟ 覽ㄌㄢˇ 角ㄐㄧㄠˇ 解ㄐㄧㄝˇ 計ㄐㄧˋ 訓ㄒㄩㄣˋ 記ㄐㄧˋ 設ㄕㄜˋ 評ㄆㄧㄥˊ 試ㄕˋ 話ㄏㄨㄚˋ 認ㄖㄣˋ 說ㄕㄨㄛ 誰ㄕㄟˊ 課ㄎㄜˋ 請ㄑㄧㄥˇ 識ㄕˋ 議ㄧˋ 讀ㄉㄨˊ 變ㄅㄧㄢˋ 貓ㄇㄠ 買ㄇㄞˇ 貼ㄊㄧㄝ 賣ㄇㄞˋ 質ㄓˊ 賽ㄙㄞˋ 走ㄗㄡˇ 起ㄑㄧˇ 超ㄔㄠ 越ㄩㄝˋ 趣ㄑㄩˋ 跑ㄆㄠˇ 距ㄐㄩˋ 跟ㄍㄣ 路ㄌㄨˋ 跳ㄊㄧㄠˋ 踏ㄊㄚˋ 蹲ㄉㄨㄣ 身ㄕㄣ 躺ㄊㄤˇ 車ㄔㄜ 軍ㄐㄩㄣ 較ㄐㄧㄠˋ 輕ㄑㄧㄥ 輛ㄌㄧㄤˋ 近ㄐㄧㄣˋ 退ㄊㄨㄟˋ 送ㄙㄨㄥˋ 這ㄓㄜˋ 通ㄊㄨㄥ 逛ㄍㄨㄤˋ 速ㄙㄨˋ 連ㄌㄧㄢˊ 進ㄐㄧㄣˋ 遊ㄧㄡˊ 遍ㄅㄧㄢˋ 過ㄍㄨㄛˋ 道ㄉㄠˋ 達ㄉㄚˊ 遠ㄩㄢˇ 適ㄕˋ 選ㄒㄩㄢˇ 還ㄏㄞˊ 邊ㄅㄧㄢ 那ㄋㄚˋ 部ㄅㄨˋ 都ㄉㄡ 配ㄆㄟˋ 里ㄌㄧˇ 重ㄓㄨㄥˋ 量ㄌㄧㄤˊ 針ㄓㄣ 鈕ㄋㄧㄡˇ 鉛ㄑㄧㄢ 錄ㄌㄨˋ 錯ㄘㄨㄛˋ 鍵ㄐㄧㄢˋ 鐘ㄓㄨㄥ 長ㄔㄤˊ 門ㄇㄣˊ 開ㄎㄞ 間ㄐㄧㄢ 關ㄍㄨㄢ 限ㄒㄧㄢˋ 除ㄔㄨˊ 階ㄐㄧㄝ 隨ㄙㄨㄟˊ 險ㄒㄧㄢˇ 隻ㄓ 集ㄐㄧˊ 離ㄌㄧˊ 零ㄌㄧㄥˊ 電ㄉㄧㄢˋ 需ㄒㄩ 青ㄑㄧㄥ 靠ㄎㄠˋ 面ㄇㄧㄢˋ 鞋ㄒㄧㄝˊ 頁ㄧㄝˋ 頂ㄉㄧㄥˇ 項ㄒㄧㄤˋ 順ㄕㄨㄣˋ 頓ㄉㄨㄣˋ 頭ㄊㄡˊ 顆ㄎㄜ 題ㄊㄧˊ 顏ㄧㄢˊ 類ㄌㄟˋ 顯ㄒㄧㄢˇ 飛ㄈㄟ 餐ㄘㄢ 騎ㄑㄧˊ 驗ㄧㄢˋ 驟ㄗㄡˋ 骰ㄊㄡˊ 體ㄊㄧˇ 高ㄍㄠ 魚ㄩˊ 鳥ㄋㄧㄠˇ 鴨ㄧㄚ 麼˙ㄇㄜ 黃ㄏㄨㄤˊ 黑ㄏㄟ 點ㄉㄧㄢˇ 齊ㄑㄧˊ 齡ㄌㄧㄥˊ 注ㄓㄨˋ 音ㄧㄣ 再ㄗㄞˋ 康ㄎㄤ 軒ㄒㄩㄢ 百ㄅㄞˇ 使ㄕˇ 錢ㄑㄧㄢˊ 幣ㄅㄧˋ 問ㄨㄣˋ 貝ㄅㄟˋ 殼ㄎㄜˊ 板ㄅㄢˇ 具ㄐㄩˋ 付ㄈㄨˋ 金ㄐㄧㄣ 額ㄜˊ 朝ㄔㄠˊ 尖ㄐㄧㄢ 風ㄈㄥ 箏ㄓㄥ 貴ㄍㄨㄟˋ 娃ㄨㄚˊ 宜ㄧˊ 恐ㄎㄨㄥˇ 龍ㄌㄨㄥˊ 昨ㄗㄨㄛˊ 今ㄐㄧㄣ 文ㄨㄣˊ 店ㄉㄧㄢˋ 膠ㄐㄧㄠ 年ㄋㄧㄢˊ 男ㄋㄢˊ 女ㄋㄩˇ 意ㄧˋ 列ㄌㄧㄝˋ 誤ㄨˋ 客ㄎㄜˋ 哥ㄍㄜ 弟ㄉㄧˋ 迴ㄏㄨㄟˊ 紋ㄨㄣˊ 留ㄌㄧㄡˊ 隙ㄒㄧˋ 橡ㄒㄧㄤˋ 擦ㄘㄚ 刻ㄎㄜˋ 段ㄉㄨㄢˋ 幫ㄅㄤ 忙ㄇㄤˊ 為ㄨㄟˋ 彈ㄉㄢˋ 珠ㄓㄨ 像ㄒㄧㄤˋ 偶ㄡˇ 鼻ㄅㄧˊ 豆ㄉㄡˋ 苗ㄇㄧㄠˊ 蓋ㄍㄞˋ 而ㄦˊ 郵ㄧㄡˊ 票ㄆㄧㄠˋ 視ㄕˋ 窗ㄔㄨㄤ 戶ㄏㄨˋ 墊ㄉㄧㄢˋ 占ㄓㄢˋ 棵ㄎㄜ 榕ㄖㄨㄥˊ 樟ㄓㄤ 桃ㄊㄠˊ 姐ㄐㄧㄝˇ 妹ㄇㄟˋ 靈ㄌㄧㄥˊ 決ㄐㄩㄝˊ 蛙ㄨㄚ 份ㄈㄣˋ 腿ㄊㄨㄟˇ 袋ㄉㄞˋ 插ㄔㄚ 束ㄕㄨˋ 思ㄙ 雙ㄕㄨㄤ 狗ㄍㄡˇ 輪ㄌㄨㄣˊ 蜘ㄓ 蛛ㄓㄨ 雞ㄐㄧ 昆ㄎㄨㄣ 彩ㄘㄞˇ 串ㄔㄨㄢˋ 葡ㄆㄨˊ 萄ㄊㄠˊ 盆ㄆㄣˊ 期ㄑㄧ 遞ㄉㄧˋ 低ㄉㄧ 粗ㄘㄨ 細ㄒㄧˋ 胖ㄆㄤˋ 汁ㄓ 柳ㄌㄧㄡˇ 橙ㄔㄥˊ 芭ㄅㄚ 樂ㄌㄜˋ 羽ㄩˇ 彤ㄊㄨㄥˊ 宥ㄧㄡˋ 翔ㄒㄧㄤˊ 壺ㄏㄨˊ 掂ㄉㄧㄢ 飲ㄧㄣˇ 料ㄌㄧㄠˋ 沉ㄔㄣˊ 感ㄍㄢˇ 覺ㄐㄩㄝˊ 壓ㄧㄚ 如ㄖㄨˊ 石ㄕˊ 棉ㄇㄧㄢˊ 鐵ㄊㄧㄝˇ 衛ㄨㄟˋ 橘ㄐㄩˊ 梨ㄌㄧˊ 香ㄒㄧㄤ 蕉ㄐㄧㄠ 摸ㄇㄛ 軟ㄖㄨㄢˇ 硬ㄧㄥˋ 雖ㄙㄨㄟ 然ㄖㄢˊ 卻ㄑㄩㄝˋ 實ㄕˊ 屬ㄕㄨˇ`;
+const ZY_RAW=`一ㄧ 七ㄑㄧ 三ㄙㄢ 上ㄕㄤˋ 下ㄒㄧㄚˋ 不ㄅㄨˋ 丙ㄅㄧㄥˇ 中ㄓㄨㄥ 久ㄐㄧㄡˇ 之ㄓ 乘ㄔㄥˊ 乙ㄧˇ 九ㄐㄧㄡˇ 也ㄧㄝˇ 亂ㄌㄨㄢˋ 了˙ㄌㄜ 事ㄕˋ 二ㄦˋ 互ㄏㄨˋ 五ㄨˇ 些ㄒㄧㄝ 交ㄐㄧㄠ 人ㄖㄣˊ 什ㄕㄣˊ 他ㄊㄚ 以ㄧˇ 件ㄐㄧㄢˋ 任ㄖㄣˋ 休ㄒㄧㄡ 伸ㄕㄣ 但ㄉㄢˋ 位ㄨㄟˋ 住ㄓㄨˋ 何ㄏㄜˊ 作ㄗㄨㄛˋ 你ㄋㄧˇ 佳ㄐㄧㄚ 來ㄌㄞˊ 例ㄌㄧˋ 依ㄧ 便ㄅㄧㄢˋ 係ㄒㄧˋ 保ㄅㄠˇ 信ㄒㄧㄣˋ 個˙ㄍㄜ 倍ㄅㄟˋ 們˙ㄇㄣ 倒ㄉㄠˋ 候˙ㄏㄡ 借ㄐㄧㄝˋ 假ㄐㄧㄚˇ 做ㄗㄨㄛˋ 停ㄊㄧㄥˊ 備ㄅㄟˋ 元ㄩㄢˊ 先ㄒㄧㄢ 光ㄍㄨㄤ 入ㄖㄨˋ 內ㄋㄟˋ 全ㄑㄩㄢˊ 兩ㄌㄧㄤˇ 八ㄅㄚ 公ㄍㄨㄥ 六ㄌㄧㄡˋ 共ㄍㄨㄥˋ 其ㄑㄧˊ 典ㄉㄧㄢˇ 冊ㄘㄜˋ 再ㄗㄞˋ 冠ㄍㄨㄢˋ 冷ㄌㄥˇ 出ㄔㄨ 分ㄈㄣ 切ㄑㄧㄝ 判ㄆㄢˋ 別ㄅㄧㄝˊ 刪ㄕㄢ 到ㄉㄠˋ 刷ㄕㄨㄚ 前ㄑㄧㄢˊ 剛ㄍㄤ 剩ㄕㄥˋ 剪ㄐㄧㄢˇ 力ㄌㄧˋ 功ㄍㄨㄥ 加ㄐㄧㄚ 努ㄋㄨˇ 勇ㄩㄥˇ 動ㄉㄨㄥˋ 勵ㄌㄧˋ 勾ㄍㄡ 包ㄅㄠ 匙ㄔˊ 十ㄕˊ 升ㄕㄥ 午ㄨˇ 半ㄅㄢˋ 博ㄅㄛˊ 卡ㄎㄚˇ 卷ㄐㄩㄢˋ 厚ㄏㄡˋ 原ㄩㄢˊ 去ㄑㄩˋ 參ㄘㄢ 又ㄧㄡˋ 友ㄧㄡˇ 反ㄈㄢˇ 口ㄎㄡˇ 另ㄌㄧㄥˋ 只ㄓˇ 叫ㄐㄧㄠˋ 叭˙ㄅㄚ 可ㄎㄜˇ 台ㄊㄞˊ 右ㄧㄡˋ 吃ㄔ 各ㄍㄜˋ 合ㄏㄜˊ 同ㄊㄨㄥˊ 向ㄒㄧㄤˋ 呢˙ㄋㄜ 周ㄓㄡ 呱ㄍㄨㄚ 味ㄨㄟˋ 和ㄏㄢˋ 哪ㄋㄚˇ 唸ㄋㄧㄢˋ 念ㄋㄧㄢˋ 商ㄕㄤ 喇ㄌㄚˇ 喔ㄛ 喝ㄏㄜ 單ㄉㄢ 嗎˙ㄇㄚ 器ㄑㄧˋ 囉˙ㄌㄨㄛ 四ㄙˋ 回ㄏㄨㄟˊ 因ㄧㄣ 圈ㄑㄩㄢ 圍ㄨㄟˊ 園ㄩㄢˊ 圓ㄩㄢˊ 圖ㄊㄨˊ 在ㄗㄞˋ 地ㄉㄧˋ 均ㄐㄩㄣ 坐ㄗㄨㄛˋ 基ㄐㄧ 堆ㄉㄨㄟ 場ㄔㄤˊ 塊ㄎㄨㄞˋ 塗ㄊㄨˊ 塘ㄊㄤˊ 填ㄊㄧㄢˊ 士ㄕˋ 外ㄨㄞˋ 多ㄉㄨㄛ 夠ㄍㄡˋ 大ㄉㄚˋ 天ㄊㄧㄢ 太ㄊㄞˋ 套ㄊㄠˋ 奶ㄋㄞˇ 好ㄏㄠˇ 始ㄕˇ 媽ㄇㄚ 子˙ㄗ 字ㄗˋ 存ㄘㄨㄣˊ 學ㄒㄩㄝˊ 它ㄊㄚ 完ㄨㄢˊ 定ㄉㄧㄥˋ 室ㄕˋ 害ㄏㄞˋ 家ㄐㄧㄚ 容ㄖㄨㄥˊ 寫ㄒㄧㄝˇ 寬ㄎㄨㄢ 封ㄈㄥ 對ㄉㄨㄟˋ 小ㄒㄧㄠˇ 少ㄕㄠˇ 就ㄐㄧㄡˋ 尺ㄔˇ 屋ㄨ 層ㄘㄥˊ 左ㄗㄨㄛˇ 差ㄔㄚ 己ㄐㄧˇ 已ㄧˇ 帆ㄈㄢˊ 師ㄕ 帶ㄉㄞˋ 常ㄔㄤˊ 帽ㄇㄠˋ 幅ㄈㄨˊ 幕ㄇㄨˋ 平ㄆㄧㄥˊ 幾ㄐㄧˇ 床ㄔㄨㄤˊ 序ㄒㄩˋ 底ㄉㄧˇ 度ㄉㄨˋ 廂ㄒㄧㄤ 建ㄐㄧㄢˋ 式ㄕˋ 弧ㄏㄨˊ 張ㄓㄤ 彎ㄨㄢ 形ㄒㄧㄥˊ 往ㄨㄤˇ 很ㄏㄣˇ 律ㄌㄩˋ 後ㄏㄡˋ 徑ㄐㄧㄥˋ 得˙ㄉㄜ 從ㄘㄨㄥˊ 心ㄒㄧㄣ 忘ㄨㄤˋ 快ㄎㄨㄞˋ 怎ㄗㄣˇ 性ㄒㄧㄥˋ 情ㄑㄧㄥˊ 想ㄒㄧㄤˇ 愈ㄩˋ 慢ㄇㄢˋ 慶ㄑㄧㄥˋ 懂ㄉㄨㄥˇ 應ㄧㄥ 成ㄔㄥˊ 我ㄨㄛˇ 或ㄏㄨㄛˋ 戰ㄓㄢˋ 戲ㄒㄧˋ 戴ㄉㄞˋ 房ㄈㄤˊ 所ㄙㄨㄛˇ 扇ㄕㄢˋ 手ㄕㄡˇ 才ㄘㄞˊ 打ㄉㄚˇ 找ㄓㄠˇ 把ㄅㄚˇ 投ㄊㄡˊ 拉ㄌㄚ 拼ㄆㄧㄣ 拿ㄋㄚˊ 持ㄔˊ 指ㄓˇ 按ㄢˋ 挑ㄊㄧㄠˇ 挖ㄨㄚ 掃ㄙㄠˇ 掉ㄉㄧㄠˋ 排ㄆㄞˊ 探ㄊㄢˋ 接ㄐㄧㄝ 推ㄊㄨㄟ 描ㄇㄧㄠˊ 提ㄊㄧˊ 換ㄏㄨㄢˋ 撈ㄌㄠ 撿ㄐㄧㄢˇ 操ㄘㄠ 改ㄍㄞˇ 放ㄈㄤˋ 敏ㄇㄧㄣˇ 教ㄐㄧㄠˋ 整ㄓㄥˇ 數ㄕㄨˇ 新ㄒㄧㄣ 斷ㄉㄨㄢˋ 方ㄈㄤ 於ㄩˊ 旁ㄆㄤˊ 旗ㄑㄧˊ 早ㄗㄠˇ 明ㄇㄧㄥˊ 易ㄧˋ 星ㄒㄧㄥ 是ㄕˋ 時ㄕˊ 晚ㄨㄢˇ 曲ㄑㄩ 更ㄍㄥˋ 書ㄕㄨ 最ㄗㄨㄟˋ 會ㄏㄨㄟˋ 有ㄧㄡˇ 朋ㄆㄥˊ 朗ㄌㄤˇ 木ㄇㄨˋ 本ㄅㄣˇ 朵ㄉㄨㄛˇ 杯ㄅㄟ 東ㄉㄨㄥ 林ㄌㄧㄣˊ 果ㄍㄨㄛˇ 枝ㄓ 查ㄔㄚˊ 柴ㄔㄞˊ 校ㄒㄧㄠˋ 根ㄍㄣ 格ㄍㄜˊ 框ㄎㄨㄤ 案ㄢˋ 桌ㄓㄨㄛ 條ㄊㄧㄠˊ 梯ㄊㄧ 棒ㄅㄤˋ 椅ㄧˇ 模ㄇㄛˊ 樣ㄧㄤˋ 樹ㄕㄨˋ 機ㄐㄧ 檢ㄐㄧㄢˇ 櫃ㄍㄨㄟˋ 次ㄘˋ 正ㄓㄥˋ 步ㄅㄨˋ 母ㄇㄨˇ 每ㄇㄟˇ 比ㄅㄧˇ 氣ㄑㄧˋ 水ㄕㄨㄟˇ 求ㄑㄧㄡˊ 池ㄔˊ 汽ㄑㄧˋ 沒ㄇㄟˊ 油ㄧㄡˊ 法ㄈㄚˇ 泳ㄩㄥˇ 洗ㄒㄧˇ 洞ㄉㄨㄥˋ 淡ㄉㄢˋ 混ㄏㄨㄣˋ 減ㄐㄧㄢˇ 測ㄘㄜˋ 游ㄧㄡˊ 湯ㄊㄤ 準ㄓㄨㄣˇ 溜ㄌㄧㄡ 滑ㄏㄨㄚˊ 滾ㄍㄨㄣˇ 滿ㄇㄢˇ 漏ㄌㄡˋ 演ㄧㄢˇ 澡ㄗㄠˇ 瀏ㄌㄧㄡˊ 火ㄏㄨㄛˇ 灰ㄏㄨㄟ 照ㄓㄠˋ 煮ㄓㄨˇ 熟ㄕㄡˊ 熱ㄖㄜˋ 片ㄆㄧㄢˋ 版ㄅㄢˇ 牙ㄧㄚˊ 牛ㄋㄧㄡˊ 物ㄨˋ 特ㄊㄜˋ 狀ㄓㄨㄤˋ 猜ㄘㄞ 獎ㄐㄧㄤˇ 率ㄌㄩˋ 玩ㄨㄢˊ 現ㄒㄧㄢˋ 球ㄑㄧㄡˊ 理ㄌㄧˇ 環ㄏㄨㄢˊ 瓢ㄆㄧㄠˊ 瓶ㄆㄧㄥˊ 生ㄕㄥ 用ㄩㄥˋ 甲ㄐㄧㄚˇ 番ㄈㄢ 畫ㄏㄨㄚˋ 當ㄉㄤ 疊ㄉㄧㄝˊ 發ㄈㄚ 白ㄅㄞˊ 的˙ㄉㄜ 皮ㄆㄧˊ 盒ㄏㄜˊ 盤ㄆㄢˊ 目ㄇㄨˋ 直ㄓˊ 相ㄒㄧㄤ 看ㄎㄢˋ 真ㄓㄣ 眨ㄓㄚˇ 眼ㄧㄢˇ 睛˙ㄐㄧㄥ 知ㄓ 短ㄉㄨㄢˇ 矮ㄞˇ 碗ㄨㄢˇ 確ㄑㄩㄝˋ 碼ㄇㄚˇ 礎ㄔㄨˇ 示ㄕˋ 禮ㄌㄧˇ 秒ㄇㄧㄠˇ 移ㄧˊ 程ㄔㄥˊ 種ㄓㄨㄥˇ 積ㄐㄧ 穩ㄨㄣˇ 空ㄎㄨㄥ 穿ㄔㄨㄢ 立ㄌㄧˋ 站ㄓㄢˋ 章ㄓㄤ 端ㄉㄨㄢ 競ㄐㄧㄥˋ 符ㄈㄨˊ 第ㄉㄧˋ 筆ㄅㄧˇ 等ㄉㄥˇ 答ㄉㄚˊ 算ㄙㄨㄢˋ 管ㄍㄨㄢˇ 箱ㄒㄧㄤ 節ㄐㄧㄝˊ 簡ㄐㄧㄢˇ 籃ㄌㄢˊ 精ㄐㄧㄥ 糕ㄍㄠ 糖ㄊㄤˊ 紀ㄐㄧˋ 約ㄩㄝ 紅ㄏㄨㄥˊ 紙ㄓˇ 級ㄐㄧˊ 索ㄙㄨㄛˇ 結ㄐㄧㄝˊ 給ㄍㄟˇ 經ㄐㄧㄥ 綜ㄗㄨㄥˋ 線ㄒㄧㄢˋ 緞ㄉㄨㄢˋ 編ㄅㄧㄢ 練ㄌㄧㄢˋ 總ㄗㄨㄥˇ 績ㄐㄧ 繩ㄕㄥˊ 繼ㄐㄧˋ 續ㄒㄩˋ 缸ㄍㄤ 罐ㄍㄨㄢˋ 置ㄓˋ 羊ㄧㄤˊ 美ㄇㄟˇ 習ㄒㄧˊ 翰ㄏㄢˋ 老ㄌㄠˇ 考ㄎㄠˇ 聽ㄊㄧㄥ 背ㄅㄟˋ 能ㄋㄥˊ 腦ㄋㄠˇ 腳ㄐㄧㄠˇ 臉ㄌㄧㄢˇ 自ㄗˋ 與ㄩˇ 船ㄔㄨㄢˊ 色ㄙㄜˋ 花ㄏㄨㄚ 茄ㄑㄧㄝˊ 葉ㄧㄝˋ 著˙ㄓㄜ 薄ㄅㄠˊ 藍ㄌㄢˊ 蘋ㄆㄧㄥˊ 虛ㄒㄩ 號ㄏㄠˋ 蛋ㄉㄢˋ 螞ㄇㄚˇ 螢ㄧㄥˊ 蟲ㄔㄨㄥˊ 蟻ㄧˇ 蠟ㄌㄚˋ 表ㄅㄧㄠˇ 被ㄅㄟˋ 裝ㄓㄨㄤ 裡ㄌㄧˇ 複ㄈㄨˋ 襪ㄨㄚˋ 西ㄒㄧ 要ㄧㄠˋ 規ㄍㄨㄟ 覽ㄌㄢˇ 角ㄐㄧㄠˇ 解ㄐㄧㄝˇ 計ㄐㄧˋ 訓ㄒㄩㄣˋ 記ㄐㄧˋ 設ㄕㄜˋ 評ㄆㄧㄥˊ 試ㄕˋ 話ㄏㄨㄚˋ 認ㄖㄣˋ 說ㄕㄨㄛ 誰ㄕㄟˊ 課ㄎㄜˋ 請ㄑㄧㄥˇ 識ㄕˋ 議ㄧˋ 讀ㄉㄨˊ 變ㄅㄧㄢˋ 貓ㄇㄠ 買ㄇㄞˇ 貼ㄊㄧㄝ 賣ㄇㄞˋ 質ㄓˊ 賽ㄙㄞˋ 走ㄗㄡˇ 起ㄑㄧˇ 超ㄔㄠ 越ㄩㄝˋ 趣ㄑㄩˋ 跑ㄆㄠˇ 距ㄐㄩˋ 跟ㄍㄣ 路ㄌㄨˋ 跳ㄊㄧㄠˋ 踏ㄊㄚˋ 蹲ㄉㄨㄣ 身ㄕㄣ 躺ㄊㄤˇ 車ㄔㄜ 軍ㄐㄩㄣ 較ㄐㄧㄠˋ 輕ㄑㄧㄥ 輛ㄌㄧㄤˋ 近ㄐㄧㄣˋ 退ㄊㄨㄟˋ 送ㄙㄨㄥˋ 這ㄓㄜˋ 通ㄊㄨㄥ 逛ㄍㄨㄤˋ 速ㄙㄨˋ 連ㄌㄧㄢˊ 進ㄐㄧㄣˋ 遊ㄧㄡˊ 遍ㄅㄧㄢˋ 過ㄍㄨㄛˋ 道ㄉㄠˋ 達ㄉㄚˊ 遠ㄩㄢˇ 適ㄕˋ 選ㄒㄩㄢˇ 還ㄏㄞˊ 邊ㄅㄧㄢ 那ㄋㄚˋ 部ㄅㄨˋ 都ㄉㄡ 配ㄆㄟˋ 里ㄌㄧˇ 重ㄓㄨㄥˋ 量ㄌㄧㄤˊ 針ㄓㄣ 鈕ㄋㄧㄡˇ 鉛ㄑㄧㄢ 錄ㄌㄨˋ 錯ㄘㄨㄛˋ 鍵ㄐㄧㄢˋ 鐘ㄓㄨㄥ 長ㄔㄤˊ 門ㄇㄣˊ 開ㄎㄞ 間ㄐㄧㄢ 關ㄍㄨㄢ 限ㄒㄧㄢˋ 除ㄔㄨˊ 階ㄐㄧㄝ 隨ㄙㄨㄟˊ 險ㄒㄧㄢˇ 隻ㄓ 集ㄐㄧˊ 離ㄌㄧˊ 零ㄌㄧㄥˊ 電ㄉㄧㄢˋ 需ㄒㄩ 青ㄑㄧㄥ 靠ㄎㄠˋ 面ㄇㄧㄢˋ 鞋ㄒㄧㄝˊ 頁ㄧㄝˋ 頂ㄉㄧㄥˇ 項ㄒㄧㄤˋ 順ㄕㄨㄣˋ 頓ㄉㄨㄣˋ 頭ㄊㄡˊ 顆ㄎㄜ 題ㄊㄧˊ 顏ㄧㄢˊ 類ㄌㄟˋ 顯ㄒㄧㄢˇ 飛ㄈㄟ 餐ㄘㄢ 騎ㄑㄧˊ 驗ㄧㄢˋ 驟ㄗㄡˋ 骰ㄊㄡˊ 體ㄊㄧˇ 高ㄍㄠ 魚ㄩˊ 鳥ㄋㄧㄠˇ 鴨ㄧㄚ 麼˙ㄇㄜ 黃ㄏㄨㄤˊ 黑ㄏㄟ 點ㄉㄧㄢˇ 齊ㄑㄧˊ 齡ㄌㄧㄥˊ 注ㄓㄨˋ 音ㄧㄣ 再ㄗㄞˋ 康ㄎㄤ 軒ㄒㄩㄢ 百ㄅㄞˇ 使ㄕˇ 錢ㄑㄧㄢˊ 幣ㄅㄧˋ 問ㄨㄣˋ 貝ㄅㄟˋ 殼ㄎㄜˊ 板ㄅㄢˇ 具ㄐㄩˋ 付ㄈㄨˋ 金ㄐㄧㄣ 額ㄜˊ 朝ㄔㄠˊ 尖ㄐㄧㄢ 風ㄈㄥ 箏ㄓㄥ 貴ㄍㄨㄟˋ 娃ㄨㄚˊ 宜ㄧˊ 恐ㄎㄨㄥˇ 龍ㄌㄨㄥˊ 昨ㄗㄨㄛˊ 今ㄐㄧㄣ 文ㄨㄣˊ 店ㄉㄧㄢˋ 膠ㄐㄧㄠ 年ㄋㄧㄢˊ 男ㄋㄢˊ 女ㄋㄩˇ 意ㄧˋ 列ㄌㄧㄝˋ 誤ㄨˋ 客ㄎㄜˋ 哥ㄍㄜ 弟ㄉㄧˋ 迴ㄏㄨㄟˊ 紋ㄨㄣˊ 留ㄌㄧㄡˊ 隙ㄒㄧˋ 橡ㄒㄧㄤˋ 擦ㄘㄚ 刻ㄎㄜˋ 段ㄉㄨㄢˋ 幫ㄅㄤ 忙ㄇㄤˊ 為ㄨㄟˋ 彈ㄉㄢˋ 珠ㄓㄨ 像ㄒㄧㄤˋ 偶ㄡˇ 鼻ㄅㄧˊ 豆ㄉㄡˋ 苗ㄇㄧㄠˊ 蓋ㄍㄞˋ 而ㄦˊ 郵ㄧㄡˊ 票ㄆㄧㄠˋ 視ㄕˋ 窗ㄔㄨㄤ 戶ㄏㄨˋ 墊ㄉㄧㄢˋ 占ㄓㄢˋ 棵ㄎㄜ 榕ㄖㄨㄥˊ 樟ㄓㄤ 桃ㄊㄠˊ 姐ㄐㄧㄝˇ 妹ㄇㄟˋ 靈ㄌㄧㄥˊ 決ㄐㄩㄝˊ 蛙ㄨㄚ 份ㄈㄣˋ 腿ㄊㄨㄟˇ 袋ㄉㄞˋ 插ㄔㄚ 束ㄕㄨˋ 思ㄙ 雙ㄕㄨㄤ 狗ㄍㄡˇ 輪ㄌㄨㄣˊ 蜘ㄓ 蛛ㄓㄨ 雞ㄐㄧ 昆ㄎㄨㄣ 彩ㄘㄞˇ 串ㄔㄨㄢˋ 葡ㄆㄨˊ 萄ㄊㄠˊ 盆ㄆㄣˊ 期ㄑㄧ 遞ㄉㄧˋ 低ㄉㄧ 粗ㄘㄨ 細ㄒㄧˋ 胖ㄆㄤˋ 汁ㄓ 柳ㄌㄧㄡˇ 橙ㄔㄥˊ 芭ㄅㄚ 樂ㄌㄜˋ 羽ㄩˇ 彤ㄊㄨㄥˊ 宥ㄧㄡˋ 翔ㄒㄧㄤˊ 壺ㄏㄨˊ 掂ㄉㄧㄢ 飲ㄧㄣˇ 料ㄌㄧㄠˋ 沉ㄔㄣˊ 感ㄍㄢˇ 覺ㄐㄩㄝˊ 壓ㄧㄚ 如ㄖㄨˊ 石ㄕˊ 棉ㄇㄧㄢˊ 鐵ㄊㄧㄝˇ 衛ㄨㄟˋ 橘ㄐㄩˊ 梨ㄌㄧˊ 香ㄒㄧㄤ 蕉ㄐㄧㄠ 摸ㄇㄛ 軟ㄖㄨㄢˇ 硬ㄧㄥˋ 雖ㄙㄨㄟ 然ㄖㄢˊ 卻ㄑㄩㄝˋ 實ㄕˊ 屬ㄕㄨˇ 尾ㄨㄟˇ`;
 const ZY={};ZY_RAW.split(/\s+/).forEach(w=>{if(w)ZY[w[0]]=w.slice(1);});
 /* 破音字：[規則, 這個字在符合時的讀音]；規則裡用 ( ) 包住要改讀音的那個字 */
 const ZY_RULES=[
@@ -1610,6 +1629,86 @@ function zyStart(){
   zyNode(document.body);
   new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(x=>{if(x.isConnected)zyNode(x);}))).observe(document.body,{childList:true,subtree:true});
 }
+
+/* 我懂的鷹架圖：依題目開頭配圖（一上、二上共用；找不到的題目就不放圖） */
+const KNOW_VIS=[
+ ['數東西的時候',()=>objs(5,'apple')],['「三」寫成數字',()=>objs(3,'star')],['「十」寫成數字',()=>frames(10)],['十格框兩排都放滿',()=>frames(10)],
+ ['5 個盤子',()=>matchV(5,5,'o','cake')],['比長短的時候',()=>segAlignV()],['彎彎的線叫做',()=>side2(lineV('wave'),lineV('straight'))],
+ ['比身高時',()=>heightsV([150,120])],['人可以比高矮',()=>thickV([8,3])],['用積木量長度',()=>cubesV([6,4])],
+ ['紙條和紅牙刷一樣長',()=>stripsV([{len:6,lab:'紙'},{len:6,lab:'紅'},{len:8,lab:'藍'}],{align:true,kind:'ribbon'})],
+ ['7 的後面是幾',()=>trainV([5,6,7,'?'])],['從 10 倒著數',()=>trainV([10,'?',8,7])],['「第 3 個」',()=>dotRow(6,[2])],['從左邊數和從右邊數',()=>rowV(['apple','ball','star','fish','car'])],
+ ['一個對一個連完，蘋果多出',()=>matchV(7,5,'apple','ball')],['5 個人、5 張椅子',()=>matchV(5,5,'kid','o')],
+ ['6 可以分成 2 和幾',()=>pair(2,4,'ball')+partBox(6,2,'?')],['分合圖上面那一格',()=>partBox(7,2,5)],['3 和 4 合起來',()=>pair(3,4,'candy')],['合起來的分合圖',()=>partBox(7,3,4,true)],
+ ['盒子裡一枝筆都沒有',()=>plateV(0,'cake')],['0 和 1，哪一個比較少',()=>side2(plateV(0,'apple'),plateV(1,'apple'))],
+ ['10 可以分成 7 和幾',()=>frames(10,{a:7})],['10 分成 6 和 4',()=>side2(frames(10,{a:6}),frames(10,{a:5}))],
+ ['哪一種東西最容易滾動',()=>side2(solidV('ball'),solidV('box'),solidV('cube'))],['哪一個比較適合疊高',()=>side2(solidV('box'),solidV('ball'))],
+ ['三角形有幾個角',()=>flatV('tri',0,'k1')],['罐子的底描下來',()=>solidV('can')],['數圖裡有幾個三角形',()=>sceneV([['tri',0,'k1'],['square',0,'k3'],['tri',2,'k6'],['circle',0,'k4'],['tri',1,'k5']])],
+ ['3 + 2 = 5 怎麼讀',()=>pair(3,2,'o')],['「又飛來了幾隻」',()=>pair(3,2,'duck')],['7 + 0',()=>pair(7,0,'ball')],['0 + 5',()=>pair(0,5,'ball')],
+ ['1 + 8，從哪一個',()=>frames(9,{a:8})],['3 + 5 和 5 + 3',()=>side2(frames(8,{a:3}),frames(8,{a:5}))],
+ ['5 − 2 = 3 怎麼讀',()=>objs(5,'o',{cross:2})],['「飛走了幾隻',()=>objs(6,'duck',{cross:2})],['6 − 6',()=>objs(6,'o',{cross:6})],['9 − 0',()=>objs(9,'o')],
+ ['8 − 2，從 8 往回數',()=>objs(8,'o',{cross:2})],['7 可以分成 3 和 4',()=>partBox(7,3,4)],['游泳池有 9 人',()=>objs(9,'kid',{cross:4})],['盒子裡有 5 顆紅蘋果',()=>pair(5,3,'apple','gapple')],
+ ['10 和 3 合起來',()=>frames(13)],['17 怎麼讀',()=>frames(17)],['2 個 10 是多少',()=>frames(20)],['二十四寫成數字',()=>frames(24)],
+ ['19 的後面',()=>trainV([17,18,19,'?'])],['23 和 25 的中間',()=>trainV([23,'?',25])],['12 和 21',()=>frames(12)+frames(21)],
+ ['整點的時候',()=>clockV(3,0,160)],['短針指到 3、長針指到 12',()=>clockV(3,0,160)],['幾點半的時候',()=>clockV(8,30,160)],['短針在 4 和 5 的中間',()=>clockV(4,30,160)],
+ ['早上起床刷牙',()=>clockV(7,0,160)],['放學回家',()=>clockV(4,0,160)],['長針走 1 圈，短針',()=>side2(clockV(3,0,140),clockV(4,0,140))],['3 點過 1 小時',()=>clockV(3,0,160)],
+ /* 二上 */
+ ['109 多 1',()=>trainV([107,108,109,'?'])],['「一百零三」',()=>baseTenV(1,0,3)],['10 個十是多少',()=>baseTenV(0,10,0)],['1 個百、0 個十、6 個一',()=>baseTenV(1,0,6)],
+ ['數錢的時候',()=>moneyV2({100:1,50:1,10:2,1:3})],['1 個 50 元可以換',()=>moneyV2({50:1,10:5})],
+ ['186 和 188',()=>`<table class="tb pv"><tr><th></th><th>百位</th><th>十位</th><th>個位</th></tr><tr><th>186</th><td>1</td><td>8</td><td class="q">6</td></tr><tr><th>188</th><td>1</td><td>8</td><td class="q">8</td></tr></table>`],
+ ['「>」讀作',()=>EQ('164','&gt;','139')],['個位相加是 13',()=>vertV(45,28,'+')],['直式加法要先算',()=>vertV(45,28,'+')],['個位 3 − 7',()=>vertV(53,27,'−')],['借給個位以後',()=>vertV(53,27,'−')],
+ ['「還剩下多少」',()=>objs(8,'apple',{cross:3})],['6 + 35 的直式',()=>vertV(6,35,'+')],['用迴紋針量長度',()=>unitMeasureV(5,1)],['哥哥用大積木量',()=>unitMeasureV(5,1.6)+unitMeasureV(5,1)],
+ ['尺上的一大格',()=>rulerCm(0,0,{cubes:1})],['公分可以用',()=>rulerCm(0,0)],['用尺量東西',()=>rulerCm(0,7)],['蠟筆比 6 公分長一點',()=>rulerCm(0,6.3,{kind:'rope'})],
+ ['兩條繩子接起來',()=>segV('?',12,25,{unit:'公分'})],['紅繩 30 公分、藍繩 20',()=>stripsV([{len:6,lab:'紅'},{len:4,lab:'藍'}],{align:true,kind:'ribbon'})],
+ ['因為 14 + 6 = 20',()=>segV(20,14,6)],['86 − 47 = 39',()=>side2(vertV(86,47,'−',39),vertV(39,47,'+',86))],['原來有 8 顆，又買了',()=>segV(20,8,'?')],['線段圖上「全部」是 30',()=>segV(30,12,'?')],
+ ['「面積」是在比什麼',()=>overlapV([8,7],[5,4])],['兩張卡片疊在一起',()=>overlapV([8,7],[5,4])],
+ ['用一樣大的方格比面積',()=>gridTwo([[0,0],[1,0],[2,0],[0,1],[1,1],[2,1]],[[0,0],[1,0],[2,0],[3,0],[1,1]])],['甲有 8 格，乙有 6 格',()=>gridTwo([[0,0],[1,0],[2,0],[3,0],[0,1],[1,1],[2,1],[3,1]],[[0,0],[1,0],[2,0],[0,1],[1,1],[2,1]])],
+ ['一隻青蛙有 4 條腿',()=>groupsV(3,4,'o')],['「5 的 2 倍」',()=>groupsV(2,5,'o')],
+ [/^(\d) × (\d) 是什麼意思/,m=>groupsV(+m[2],+m[1],'o')],
+ ['分針走一大格',()=>clockM(10,5,180)],['時針在 3 和 4 中間',()=>clockM(3,25,180)],['10:08 是幾時幾分',()=>digi(10,8)],['7 時 49 分的數字鐘',()=>clockM(7,49,180)],
+ ['60 分鐘和幾小時',()=>side2(clockM(8,0,150),clockM(9,0,150))],['時針從 2 走到 5',()=>side2(clockM(2,0,150),clockM(5,0,150))],['4 時 15 分過 1 小時',()=>clockM(4,15,180)],['過了 3 小時，分針',()=>clockM(2,20,180)],
+ ['把杯子裡的果汁倒進',()=>cupsV([[50,.7,'倒之前'],[95,.38,'倒之後']])],['兩個一樣的杯子',()=>cupsV([[60,.4,'甲'],[60,.7,'乙']])],['甲壺倒滿 6 杯',()=>smallCups(6,'甲壺')+smallCups(4,'乙壺')],
+ ['天平往下沉',()=>scaleV(itemIcon('ball'),itemIcon('candy'),'L')],['看起來比較大的東西',()=>scaleV(itemTxt('氣球','k3'),itemTxt('石頭','k2'),'R')],
+ ['甲和 6 個積木一樣重',()=>scaleV(itemTxt('甲'),itemBlocks(6),'=')+scaleV(itemTxt('乙','k6'),itemBlocks(9),'=')]
+];
+U.forEach(un=>un.levels.forEach(L=>L.know.forEach(k=>{if(k.v)return;for(const [key,fn] of KNOW_VIS){const m=typeof key==='string'?(k.q.startsWith(key)?[]:null):k.q.match(key);if(m){try{k.v=fn(m);}catch(e){}break;}}})));
+
+/* ---------- 二上「我看」：簡化版解題線索（一個框只說一件事、句子短、每步配圖） ---------- */
+const PV2=(a,b)=>`<table class="tb pv"><tr><th></th><th>百位</th><th>十位</th><th>個位</th></tr><tr><th>${a}</th>${dig(a).map(d=>`<td>${d}</td>`).join('')}</tr><tr><th>${b}</th>${dig(b).map(d=>`<td>${d}</td>`).join('')}</tr></table>`;
+const LOOK2={
+ '1-1':[{k:'多 1',t:'99 再多 1，是 {{100}}。',v:trainV([97,98,99,'?'])},{k:'讀出來',t:'100 讀作「一{{百}}」。'},{k:'接著數',t:'100、101、{{102}}。',v:trainV([100,101,'?',103])},{k:'10 個 10 個數',t:'100、110、{{120}}。',v:trainV([100,110,'?',130])}],
+ '1-2':[{k:'百格板',t:'1 張百格板，是 {{100}}。',v:baseTenV(1,3,7)},{k:'十條',t:'3 條十，是 {{30}}。'},{k:'一個',t:'7 個一，是 {{7}}。'},{k:'定位板',t:'百位 1、十位 3、個位 {{7}}。',v:pvTable([1,3,7])}],
+ '1-3':[{k:'先數 100',t:'1 張 100 元，是 {{100}} 元。',v:moneyV2({100:1,50:1,5:1,1:3})},{k:'再數 50',t:'100 加 50，是 {{150}}。'},{k:'再數 5',t:'150 加 5，是 {{155}}。'},{k:'最後數 1',t:'155、156、157、{{158}}。'}],
+ '1-4':[{k:'比百位',t:'百位都是 {{1}}，一樣。',v:PV2(164,139)},{k:'比十位',t:'十位 6 和 3，{{6}} 比較大。'},{k:'結果',t:'164 比 139 {{大}}。'},{k:'寫符號',t:'164 {{&gt;}} 139，開口朝大的。'}],
+ '2-1':[{k:'對齊',t:'個位對個位，十位對十位。',v:vertV(45,28,'+')},{k:'個位',t:'5 + 8 = {{13}}。'},{k:'進位',t:'個位寫 3，十位上面記 {{1}}。'},{k:'十位',t:'1 + 4 + 2 = {{7}}。'},{k:'答案',t:'45 + 28 = {{73}}。',v:vertV(45,28,'+',73)}],
+ '2-2':[{k:'對齊',t:'個位對個位，十位對十位。',v:vertV(60,24,'−')},{k:'個位',t:'0 減 4，{{不夠}} 減。'},{k:'借 1',t:'向十位借 1，個位變成 {{10}}。'},{k:'個位算',t:'10 − 4 = {{6}}。'},{k:'十位',t:'6 借走 1 變 5，5 − 2 = {{3}}。'},{k:'答案',t:'60 − 24 = {{36}}。',v:vertV(60,24,'−',36)}],
+ '2-3':[{k:'個位',t:'7 + 3 = {{10}}。',v:vertV(27,43,'+')},{k:'寫 0 進 1',t:'個位寫 0，十位記 {{1}}。'},{k:'十位',t:'1 + 2 + 4 = {{7}}。'},{k:'答案',t:'27 + 43 = {{70}}。',v:vertV(27,43,'+',70)}],
+ '3-1':[{k:'排排好',t:'迴紋針一個接一個排。',v:unitMeasureV(5,1)},{k:'數一數',t:'鉛筆有 {{5}} 個迴紋針長。'},{k:'用大的量',t:'用大的東西量，個數比較 {{少}}。',v:unitMeasureV(3,1.66)}],
+ '3-2':[{k:'一大格',t:'尺上一大格，是 {{1}} 公分。',v:rulerCm(0,0,{cubes:1})},{k:'排積木',t:'8 個積木，是 {{8}} 公分。',v:rulerCm(0,0,{cubes:8})},{k:'寫法',t:'公分可以寫成 {{cm}}。'}],
+ '3-3':[{k:'對齊 0',t:'鉛筆的頭，對齊 {{0}}。',v:rulerCm(0,7)},{k:'看另一頭',t:'另一頭指到 {{7}}。'},{k:'長度',t:'鉛筆長 {{7}} 公分。'},{k:'沒對齊 0',t:'從 2 到 9，有 {{7}} 大格。',v:rulerCm(2,9)}],
+ '3-4':[{k:'接起來',t:'兩條接起來，用 {{加法}}。',v:segV('?',12,25,{unit:'公分'})},{k:'算一算',t:'12 + 25 = {{37}}。'},{k:'長多少',t:'比長多少，用 {{減法}}。'}],
+ '4-1':[{k:'看圖',t:'3 和 7 接起來，是 {{10}}。',v:segV(10,3,7,{unit:'公分'})},{k:'拿走 3',t:'10 − 3 = {{7}}。'},{k:'拿走 7',t:'10 − 7 = {{3}}。'}],
+ '4-2':[{k:'先算',t:'60 − 24 = {{36}}。',v:vertV(60,24,'−',36)},{k:'加回去',t:'36 + 24 = {{60}}。',v:vertV(36,24,'+',60)},{k:'對了',t:'加回去是 60，答案 {{對}} 了。'}],
+ '4-3':[{k:'全部',t:'全部是 {{15}} 公分。',v:segV(15,3,'?',{unit:'公分'})},{k:'原來',t:'原來是 {{3}} 公分。'},{k:'變長多少',t:'15 − 3 = {{12}}。'}],
+ '5-1':[{k:'疊起來',t:'把卡片放在信封上面。',v:overlapV([8,7],[5,4])},{k:'被蓋住',t:'卡片被信封 {{蓋住}} 了。'},{k:'比結果',t:'信封比較 {{大}}。'}],
+ '5-2':[{k:'描下來',t:'用描圖紙，描下電視的大小。'},{k:'放上去',t:'放到窗戶上，窗戶比較 {{大}}。'},{k:'結果',t:'所以窗戶比電視 {{大}}。'}],
+ '5-3':[{k:'數甲',t:'甲有 {{6}} 格。',v:gridTwo([[0,0],[1,0],[2,0],[0,1],[1,1],[2,1]],[[0,0],[1,0],[2,0],[3,0],[1,1]])},{k:'數乙',t:'乙有 {{5}} 格。'},{k:'比一比',t:'格子多的比較大，{{甲}} 比較大。'}],
+ '6-1':[{k:'先算兩個',t:'20 + 30 = {{50}}。'},{k:'再加',t:'50 + 40 = {{90}}。'},{k:'答案',t:'一共有 {{90}} 棵樹。'}],
+ '6-2':[{k:'第一次',t:'100 − 35 = {{65}}。'},{k:'第二次',t:'65 − 25 = {{40}}。'},{k:'答案',t:'還剩 {{40}} 元。'}],
+ '6-3':[{k:'下車',t:'下車，人變 {{少}}。'},{k:'先減',t:'25 − 8 = {{17}}。'},{k:'上車',t:'上車，人變 {{多}}。'},{k:'再加',t:'17 + 12 = {{29}}。'}],
+ '7-1':[{k:'每隻一樣',t:'每隻青蛙有 {{2}} 個眼睛。',v:groupsV(3,2,'o')},{k:'加起來',t:'2 + 2 + 2 = {{6}}。'},{k:'倍',t:'3 個 2，是 2 的 {{3}} 倍。'}],
+ '8-1':[{k:'短針',t:'短針在 10 和 11 中間，是 {{10}} 時多。',v:clockM(10,20)},{k:'長針',t:'長針走了 {{4}} 大格。'},{k:'5 個一數',t:'5、10、15、{{20}}。'},{k:'答案',t:'是 10 時 {{20}} 分。'}],
+ '8-2':[{k:'左邊',t:'「：」左邊是 {{5}} 時。',v:digi(5,19)},{k:'右邊',t:'「：」右邊是 {{19}} 分。'},{k:'讀出來',t:'是 5 時 {{19}} 分。'}],
+ '8-3':[{k:'長針一圈',t:'長針走 1 圈，是 {{60}} 分鐘。',v:side2(clockM(8,0,150),clockM(9,0,150))},{k:'短針一格',t:'短針從 8 走到 {{9}}。'},{k:'1 小時',t:'過了 {{1}} 小時。'}],
+ '8-4':[{k:'分不變',t:'過 2 小時，分還是 {{23}}。',v:clockM(9,23)},{k:'時加 2',t:'9 + 2 = {{11}}。'},{k:'答案',t:'是 11 時 {{23}} 分。'}],
+ '10-1':[{k:'容量',t:'杯子裝滿的水，叫做 {{容量}}。'},{k:'一樣的杯子',t:'水比較高，水就比較 {{多}}。',v:cupsV([[60,.4,'甲'],[60,.7,'乙']])},{k:'水一樣高',t:'杯子比較胖，水就比較 {{多}}。',v:cupsV([[90,.5,'丙',1],[50,.5,'丁']])}],
+ '10-2':[{k:'一樣的杯子',t:'用 {{一樣}} 的杯子倒。',v:smallCups(5,'柳橙汁')+smallCups(4,'芭樂汁')},{k:'數杯數',t:'柳橙汁 {{5}} 杯，芭樂汁 4 杯。'},{k:'比結果',t:'{{柳橙汁}} 比較多。'}],
+ '10-3':[{k:'用天平',t:'重的那一邊，會往 {{下}}。',v:scaleV(itemTxt('牛奶','k3'),itemTxt('果汁','k6'),'L')},{k:'看一看',t:'往下的是 {{牛奶}}。'},{k:'大不一定重',t:'大的東西，{{不一定}} 比較重。'}],
+ '10-4':[{k:'蘋果',t:'蘋果和 {{8}} 個積木一樣重。',v:scaleV(itemIcon('apple'),itemBlocks(8),'=')},{k:'橘子',t:'橘子和 {{5}} 個積木一樣重。'},{k:'比結果',t:'8 比 5 多，{{蘋果}} 比較重。'}],
+ '10-5':[{k:'第一次',t:'甲比乙 {{重}}。',v:scaleV(itemTxt('甲'),itemTxt('乙','k6'),'L')},{k:'第二次',t:'乙比丙 {{重}}。',v:scaleV(itemTxt('乙','k6'),itemTxt('丙','k3'),'L')},{k:'排一排',t:'甲、乙、丙，最重的是 {{甲}}。'}]
+};
+U.forEach((un,u)=>un.levels.forEach((L,l)=>{const s=LOOK2[`${u+1}-${l+1}`];if(s){L.look.steps=s;return;}
+  const m=L.title.match(/^(\d) 的乘法$/);if(m){const k=+m[1],it=MULT_ITEMS[k][0];
+   L.look.steps=[{k:'一份幾個',t:`一份有 {{${k}}} ${it[1]}。`,v:groupsV(4,k,it[0])},{k:'有幾份',t:'有 {{4}} 份。'},{k:`${k} 個 ${k} 個數`,t:`${k}、${2*k}、${3*k}、{{${4*k}}}。`},{k:'寫算式',t:`${k} × 4 = {{${4*k}}}。`}];}}));
 
 /* ---------- storage & settings ---------- */
 let store={};
@@ -1658,7 +1757,7 @@ function speak(t){
   try{const s=window.speechSynthesis;if(!s)return;s.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-TW';u.rate=.82;
     const vs=s.getVoices();const v=vs.find(v=>/zh[-_]TW/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang));if(v)u.voice=v;s.speak(u);}catch(e){}
 }
-function sayBtn(target){const b=h(`<button class="say no-say" type="button" aria-label="唸給我聽">${ICON.say}</button>`);b.onclick=()=>speak(toSpeech(typeof target==='function'?target():target));return b;}
+function sayBtn(target){const b=h(`<button class="say no-say" type="button" aria-label="唸給我聽">${ICON.say}</button>`);b.onclick=()=>speak(toSpeech(typeof target==='function'?target():target));return b;}/* 報讀：每個提示框、每個文字選項旁邊自動加喇叭（按了只唸，不會選答案） */function sayHook(root){root.querySelectorAll('.fb-msg:not([data-say])').forEach(m=>{m.dataset.say=1;const t=m.querySelector(':scope>div');if(!t||!t.textContent.trim())return;const b=sayBtn(t);b.classList.add('fb-say');m.append(b);});root.querySelectorAll('.choices .opt:not([data-say])').forEach(o=>{o.dataset.say=1;if(o.parentElement.classList.contains('opt-wrap'))return;const c=o.cloneNode(true);c.querySelectorAll('svg').forEach(x=>x.remove());if(!c.textContent.trim())return;const w=document.createElement('span');w.className='opt-wrap';o.replaceWith(w);w.append(o);const s=h(`<button class="opt-say no-say" type="button" aria-label="唸這個選項">${ICON.say}</button>`);s.onclick=e=>{e.preventDefault();e.stopPropagation();speak(toSpeech(o));};w.append(s);});}new MutationObserver(()=>sayHook(document.body)).observe(document.body,{childList:true,subtree:true});
 function autoSay(el){if(store.set.auto&&el)setTimeout(()=>speak(toSpeech(el)),150);}
 
 /* ---------- answers ---------- */
@@ -1918,7 +2017,7 @@ const ttMastered=n=>{const m=drillStore().tt[n]||{};return TT_STEPS.every(k=>m[k
 function drillCards(){const D=drillStore();const m=TABLES.filter(ttMastered).length;
   return `<h2 class="drill-h">計算練功房</h2><div class="drill-cards">
   <button class="drill-card" type="button" data-go="times"><span class="dc-ic">×</span><span><b>九九乘法精熟</b><small>順序・亂序・乘數挖空・小測驗<br>已精熟 ${m} / 8 個乘法表</small></span></button>
-  <button class="drill-card" type="button" data-go="addsub"><span class="dc-ic">±</span><span><b>加減法特訓</b><small>不進退位 → 進位 → 退位 → 綜合 → 三位數<br>最佳連續答對 ${D.as.best||0} 題</small></span></button></div>`;}
+  <button class="drill-card" type="button" data-go="addsub"><span class="dc-ic">±</span><span><b>加減法特訓</b><small>不進退位 → 進位 → 退位 → 綜合 → 三位數<br>最佳連續答對 ${D.as.best||0} 題</small></span></button><a class="drill-card" href="../math-ten/"><span class="dc-ic">10</span><span><b>十的分解合成</b><small>用十格板分一分、合一合<br>10 以內的加減，不用數手指</small></span></a></div>`;}
 
 /* 九九乘法精熟 */
 const TT_MODES=[['seq','順序'],['rand','亂序'],['gap','乘數挖空'],['quiz','小測驗']];
@@ -2208,8 +2307,7 @@ function stLook(box,u,l,L,goStage){
   const X=L.look,N=X.steps.length;let i=0,keyShown=false;
   box.innerHTML=`<div class="split">
     <div class="sticky"><div class="card"><span class="ex-tag">例題</span><div class="prompt"><div class="txt">${X.ex}</div></div><div class="vis-box" id="lv"></div></div></div>
-    <div><div class="card"><div class="clue-head"><b>解題線索</b><span id="lc"></span></div><ol class="clues" id="cl"></ol>
-      <p class="look-hint" id="lh"></p>
+    <div><div class="card"><div class="clue-head"><b>解題線索</b><span id="lc"></span></div><p class="look-hint look-hint-top" id="lh"></p><ol class="clues" id="cl"></ol>
       <div class="navrow"><button class="btn" type="button" id="ln" hidden></button></div>
       <div id="lk"></div></div></div></div>`;
   $('.prompt',box).prepend(sayBtn($('.txt',box)));
@@ -2259,15 +2357,16 @@ function stLook(box,u,l,L,goStage){
   draw();
 }
 function stKnow(box,u,l,L,goStage){
+  /* 一、二年級：題目旁邊放鷹架圖（k.v），左邊作答、右邊看圖 */
   let i=0;
   function show(){
     const k=L.know[i];box.innerHTML='';
-    const card=h(`<div class="card narrow"><div class="step-n">第 ${i+1} 題 / 共 ${L.know.length} 題</div></div>`);
+    const card=h(`<div class="card ${k.v?'know-wide':'narrow'}"><div class="step-n">第 ${i+1} 題 / 共 ${L.know.length} 題</div><div class="know-split"><div class="know-q"></div>${k.v?`<div class="vis-box know-vis">${k.v}</div>`:''}</div></div>`);
     const step=qa({prompt:k.q,spec:ch(k.opts,k.a),why:k.why,fallback:L.look.key,onDone(){
       const last=i===L.know.length-1;
       const b=h(`<button class="btn" type="button" style="margin-top:1rem">${last?'去「我做」':'下一題'}${ICON.next}</button>`);
       b.onclick=()=>{if(last){markStage(u,l,'know');goStage('do');}else{i++;show();}};card.append(b);b.focus({preventScroll:true});}});
-    step.style.border='0';step.style.padding='0';card.append(step);box.append(card);autoSay($('.txt',step));
+    step.style.border='0';step.style.padding='0';$('.know-q',card).append(step);box.append(card);autoSay($('.txt',step));
   }
   show();
 }
@@ -2380,7 +2479,7 @@ function quizItems(u,ver,diff){  const L=U[u].levels;const items=[];const seen=n
     L.forEach((lv,li)=>{for(let j=0;j<per;j++){const p=uniqGen(()=>lv.adv(g));items.push({li,q:p.q,v:p.v,ask:p.ask,ans:p.ans});}});return items;}
   const g=mkR(1000*(u+1)+77*ver+1);const per=Math.max(1,Math.ceil(10/L.length)-1);
   L.forEach((lv,li)=>{
-    const k=lv.know[ver%lv.know.length];items.push({li,q:k.q,v:'',ask:'',ans:ch(k.opts,k.a,g)});seen.add(pKey2(items[items.length-1]));
+    const k=lv.know[ver%lv.know.length];items.push({li,q:k.q,v:k.v||'',ask:'',ans:ch(k.opts,k.a,g)});seen.add(pKey2(items[items.length-1]));
     for(let j=0;j<per;j++){const p=uniqGen(()=>lv.gen(g));items.push({li,q:p.q,v:p.v,ask:p.ask,ans:p.ans});}
   });
   return items;
