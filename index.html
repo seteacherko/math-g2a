@@ -520,7 +520,8 @@ html[data-zy] .stage>span:first-child{white-space:nowrap}html[data-zy] .stage sm
 .rope-calm{display:none;gap:.6rem;flex-wrap:wrap;justify-content:center}
 .rope-still{margin:0;flex:1 1 200px;text-align:center}.rope-still figcaption{font-size:.85rem;color:var(--mute)}
 [data-calm] .rope-anim{display:none}[data-calm] .rope-calm{display:flex}
-.look-hint-top{margin:0 0 .6rem}.look-hint-top:empty{display:none}
+.look-hint-top{margin:0 0 .6rem;display:flex;align-items:center;gap:.4rem}.look-hint-top:empty{display:none}
+body{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none} input{-webkit-user-select:auto;user-select:auto} .lp-on{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
 /* 二上：數字鐘、定位板 */
 .digi{display:inline-block;font-family:"Courier New",ui-monospace,monospace;font-size:2.6rem;font-weight:700;background:#1F1B24;color:#7CFC9A;padding:.25rem 1.1rem;border-radius:12px;letter-spacing:.08em;margin:.4rem auto}
 .vis-box .digi{display:table}
@@ -538,7 +539,6 @@ html[data-zy] .stage>span:first-child{white-space:nowrap}html[data-zy] .stage sm
     <button class="chip" id="t-set" type="button" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>設定</button>
   </div>
   <div class="settings" id="settings" hidden>
-    <button class="chip" type="button" data-set="zy" aria-pressed="true">注音</button>
     <button class="chip" type="button" data-set="auto" aria-pressed="false">自動朗讀題目</button>
     <button class="chip" type="button" data-set="calm" aria-pressed="false">減敏模式（顏色淡、不動畫）</button>
     <button class="chip" type="button" data-set="big" aria-pressed="false">大字</button>
@@ -1713,7 +1713,7 @@ U.forEach((un,u)=>un.levels.forEach((L,l)=>{const s=LOOK2[`${u+1}-${l+1}`];if(s)
 /* ---------- storage & settings ---------- */
 let store={};
 try{store=JSON.parse(localStorage.getItem('math2a-v1')||'{}')||{};}catch(e){store={};}
-store.p=store.p||{};store.q=store.q||{};store.qv=store.qv||{};store.qd=store.qd||{};store.set=Object.assign({zy:true,auto:true,calm:false,big:false,pad:true,calc:false},store.set||{});
+store.p=store.p||{};store.q=store.q||{};store.qv=store.qv||{};store.qd=store.qd||{};store.set=Object.assign({zy:false,auto:true,calm:false,big:false,pad:true,calc:false},store.set||{});store.set.zy=false;
 function save(){try{store.sum=summary();}catch(e){}try{localStorage.setItem('math2a-v1',JSON.stringify(store));}catch(e){}}
 function applySet(){
   const s=store.set,r=document.documentElement;
@@ -1751,7 +1751,7 @@ function toSpeech(el){
   c.querySelectorAll('button').forEach(x=>x.remove());
   c.querySelectorAll('input').forEach(i=>i.replaceWith('多少'));
   return c.textContent.replace(/×/g,'乘').replace(/÷/g,'除以').replace(/＝|=/g,'等於').replace(/≈/g,'大約是').replace(/−/g,'減').replace(/\+|＋/g,'加').replace(/→/g,'變成')
-    .replace(/\s:\s/g,'比').replace(/□|\?/g,'多少').replace(/°/g,'度').replace(/公里\/時/g,'公里每小時').replace(/公尺\/分/g,'公尺每分鐘').replace(/公尺\/秒/g,'公尺每秒').replace(/\s+/g,' ');
+    .replace(/\s:\s/g,'比').replace(/□|\?/g,'多少').replace(/°/g,'度').replace(/公里\/時/g,'公里每小時').replace(/公尺\/分/g,'公尺每分鐘').replace(/公尺\/秒/g,'公尺每秒').replace(/>/g,'大於').replace(/</g,'小於').replace(/(\d{1,2}):(\d{2})/g,(m,a,b)=>a+'點'+(b==='00'?'':(+b)+'分')).replace(/\s+/g,' ');
 }
 function speak(t){
   try{const s=window.speechSynthesis;if(!s)return;s.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-TW';u.rate=.82;
@@ -1759,6 +1759,22 @@ function speak(t){
 }
 function sayBtn(target){const b=h(`<button class="say no-say" type="button" aria-label="唸給我聽">${ICON.say}</button>`);b.onclick=()=>speak(toSpeech(typeof target==='function'?target():target));return b;}/* 報讀：每個提示框、每個文字選項旁邊自動加喇叭（按了只唸，不會選答案） */function sayHook(root){root.querySelectorAll('.fb-msg:not([data-say])').forEach(m=>{m.dataset.say=1;const t=m.querySelector(':scope>div');if(!t||!t.textContent.trim())return;const b=sayBtn(t);b.classList.add('fb-say');m.append(b);});root.querySelectorAll('.choices .opt:not([data-say])').forEach(o=>{o.dataset.say=1;if(o.parentElement.classList.contains('opt-wrap'))return;const c=o.cloneNode(true);c.querySelectorAll('svg').forEach(x=>x.remove());if(!c.textContent.trim())return;const w=document.createElement('span');w.className='opt-wrap';o.replaceWith(w);w.append(o);const s=h(`<button class="opt-say no-say" type="button" aria-label="唸這個選項">${ICON.say}</button>`);s.onclick=e=>{e.preventDefault();e.stopPropagation();speak(toSpeech(o));};w.append(s);});}new MutationObserver(()=>sayHook(document.body)).observe(document.body,{childList:true,subtree:true});
 function autoSay(el){if(store.set.auto&&el)setTimeout(()=>speak(toSpeech(el)),150);}
+/* 按住 0.5 秒：唸出手指下面的字（畫面上任何字、按鈕、圖上的數字都可以；按住念的時候，按鈕不會被按下去） */
+(function(){let t0=0,sx=0,sy=0,el=null,tm=null,fired=false;
+  const BLK='.txt,.clue-t,.key-txt,.fb-msg>div,.lead,.step-n,.opt,h1,h2,h3,p,li,td,th,figcaption,label';
+  function pick(x){if(x&&x.nodeType!==1)x=x.parentElement;if(!x||x.closest('input,textarea,.pad,.dpad,.calc,.say,.opt-say,.fb-say'))return null;
+    return x.closest('button,a')||x.closest('text')||x.closest(BLK)||x.closest('span,b,small,strong,div');}
+  function said(e){const s=toSpeech(e).trim();return s||e.getAttribute('aria-label')||'';}
+  const clear=()=>{clearTimeout(tm);tm=null;if(el)el.classList.remove('lp-on');};
+  document.addEventListener('pointerdown',e=>{if(e.button>0)return;fired=false;clear();el=pick(e.target);if(!el)return;t0=Date.now();sx=e.clientX;sy=e.clientY;
+    tm=setTimeout(()=>{if(el)el.classList.add('lp-on');},450);},true);
+  document.addEventListener('pointermove',e=>{if(el&&Math.hypot(e.clientX-sx,e.clientY-sy)>12){clear();el=null;}},true);
+  document.addEventListener('pointerup',()=>{if(el&&Date.now()-t0>=450){const s=said(el);if(s){fired=true;speak(s);setTimeout(()=>{fired=false;},700);}}const x=el;clear();el=null;if(x)setTimeout(()=>x.classList.remove('lp-on'),300);},true);
+  document.addEventListener('pointercancel',()=>{clear();el=null;},true);
+  document.addEventListener('click',e=>{if(fired){fired=false;e.preventDefault();e.stopPropagation();}},true);
+  document.addEventListener('contextmenu',e=>e.preventDefault());
+})();
+
 
 /* ---------- answers ---------- */
 function parseNum(v){if(v==null)return NaN;v=String(v).trim().replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-65248)).replace(/[．。]/g,'.').replace(/,/g,'');if(v==='')return NaN;return Number(v);}
@@ -2238,7 +2254,7 @@ function viewHome(){
         <div class="row"><button class="btn" type="button" data-go="u${u+1}">互動教學</button><button class="btn ghost" type="button" data-go="u${u+1}-quiz">形成性評量</button></div>
       </div></article>`;})}
   ${drillCards()}
-  <p class="note">進度只存在這台 iPad（或電腦）的瀏覽器裡，下次打開會接著做。右上角「設定」可以開自動朗讀、減敏模式、大字和螢幕數字鍵盤。每一題旁邊的喇叭按鈕都可以唸題目。</p>`;
+  <p class="note">進度只存在這台 iPad（或電腦）的瀏覽器裡，下次打開會接著做。右上角「設定」可以開自動朗讀、減敏模式、大字和螢幕數字鍵盤。每一題旁邊的喇叭按鈕都可以唸題目。按住畫面上任何字一下，也會念出來。</p>`;
   bindGo(V());bindHome();bindMode(V(),viewHome);
 }
 
@@ -2318,6 +2334,7 @@ function stLook(box,u,l,L,goStage){
     if(unrevealed())lh.innerHTML=`先想一想，再點 <b style="color:var(--accent)">？</b> 看答案。`;
     else if(i<N-1)lh.innerHTML=`看懂了嗎？點下面第 ${CIRC[i+1]} 個框，看下一個線索。`;
     else lh.innerHTML='';
+    if(lh.textContent.trim()){const t=h('<span></span>');t.innerHTML=lh.innerHTML;lh.innerHTML='';const sb=sayBtn(t);sb.style.cssText='width:1.9rem;height:1.9rem';lh.append(sb,t);}
   }
   function refresh(){
     const nx=$(`.clue[data-j="${i+1}"]`,cl);
@@ -2349,7 +2366,7 @@ function stLook(box,u,l,L,goStage){
       if(j===i+1){if(unrevealed()){$$('.clue.cur .peek-b',cl).forEach(p=>{p.classList.remove('nudge');void p.offsetWidth;p.classList.add('nudge');});hint();return;}i=j;draw();}});
     $$('.peek-b',cl).forEach(b=>b.onclick=()=>{b.hidden=true;b.nextElementSibling.hidden=false;refresh();});
     const curEl=$('.clue.cur',cl);
-    if(curEl&&!curEl.querySelector('.say')){const sb=sayBtn($('.clue-t',curEl));sb.style.cssText='width:2.3rem;height:2.3rem;margin-left:auto';$('.clue-k',curEl).append(sb);}
+    $$('.clue.cur,.clue.done',cl).forEach(li=>{if(li.querySelector('.say'))return;const sb=sayBtn(()=>{const d=document.createElement('div');d.innerHTML=$('.clue-k span:nth-child(2)',li).innerHTML+', '+$('.clue-t',li).innerHTML;return d;});sb.style.cssText='width:2.3rem;height:2.3rem;margin-left:auto';sb.addEventListener('click',e=>e.stopPropagation());$('.clue-k',li).append(sb);});
     refresh();autoSay($('.clue.cur .clue-t',cl));
     const nx=$('.clue.todo',cl);if(nx&&i>0)curEl.scrollIntoView({block:'nearest',behavior:store.set.calm?'auto':'smooth'});
   }
@@ -2522,7 +2539,7 @@ function viewQuiz(u){
 }
 
 applySet();render();
-try{zyStart();}catch(e){}
+/* 注音已關閉 */
 </script>
 
 <script>
